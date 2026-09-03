@@ -38,7 +38,7 @@
             Finanças<span class="text-emerald-400">PRO</span>
             <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-semibold">VITALÍCIO</span>
           </h1>
-          <p class="text-xs text-slate-400">Controle de gastos e cartões</p>
+          <p class="text-xs text-slate-400">Controle de gastos, parcelas e contas fixas</p>
         </div>
       </div>
       <div class="flex items-center gap-1">
@@ -52,7 +52,7 @@
   <!-- Main App Container (Mobile-first centered container) -->
   <main class="max-w-md sm:max-w-xl md:max-w-3xl mx-auto w-full px-4 pt-4 flex-1">
     
-    <!-- SELETOR DE MÊS (Permite navegar para frente e ver as parcelas 1/12, 2/12, 3/12...) -->
+    <!-- SELETOR DE MÊS (Permite navegar para frente e ver contas fixas e parcelas) -->
     <div class="flex items-center justify-between bg-slate-900/90 border border-slate-800 rounded-2xl p-2 mb-4">
       <button onclick="changeMonth(-1)" class="p-2 hover:bg-slate-800 text-slate-400 hover:text-white rounded-xl transition active:scale-95">
         <i data-lucide="chevron-left" class="w-5 h-5"></i>
@@ -74,14 +74,14 @@
 
       <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider mb-1">
         <span>Balanço do Mês</span>
-        <span id="badgeCurrentMonth" class="text-xs bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full font-semibold">Atual</span>
+        <span id="badgeCurrentMonth" class="text-xs bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-full font-semibold">Atual</span>
       </div>
 
       <div class="flex items-baseline gap-2 mb-6">
         <h2 id="totalBalance" class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">R$ 0,00</h2>
       </div>
 
-      <!-- Pílulas de Entradas, Saídas e Cartão -->
+      <!-- Pílulas de Entradas e Saídas -->
       <div class="grid grid-cols-2 gap-3 pt-4 border-t border-slate-800/80">
         <div class="bg-slate-950/60 rounded-2xl p-3 border border-slate-800/60 flex items-center gap-3">
           <div class="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
@@ -104,13 +104,23 @@
         </div>
       </div>
 
-      <!-- Resumo rápido de faturas parceladas do mês -->
-      <div id="cardInstallmentsAlert" class="mt-3 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-2.5 flex items-center justify-between text-xs text-indigo-300">
-        <div class="flex items-center gap-2">
-          <i data-lucide="credit-card" class="w-4 h-4 text-indigo-400"></i>
-          <span>Faturas parceladas neste mês:</span>
+      <!-- Badges de Alerta: Contas Fixas e Faturas Parceladas -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 pt-2">
+        <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-2 flex items-center justify-between text-xs text-amber-300">
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="repeat" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Contas Fixas:</span>
+          </div>
+          <span id="totalRecurringExpense" class="font-bold text-white">R$ 0,00</span>
         </div>
-        <span id="totalCardInstallments" class="font-bold text-white">R$ 0,00</span>
+
+        <div class="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-2 flex items-center justify-between text-xs text-indigo-300">
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="credit-card" class="w-3.5 h-3.5 text-indigo-400"></i>
+            <span>Parcelas Cartão:</span>
+          </div>
+          <span id="totalCardInstallments" class="font-bold text-white">R$ 0,00</span>
+        </div>
       </div>
     </section>
 
@@ -123,7 +133,7 @@
 
       <button onclick="openModal('Despesa')" class="flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-400 text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-rose-500/20 transition active:scale-95">
         <i data-lucide="minus-circle" class="w-5 h-5"></i>
-        <span>Novo Gasto / Cartão</span>
+        <span>Novo Gasto / Conta</span>
       </button>
     </div>
 
@@ -179,13 +189,13 @@
     </div>
   </nav>
 
-  <!-- MODAL DE ADICIONAR LANÇAMENTO (COM SUPORTE A CARTÃO PARCELADO EM ATÉ 12X) -->
+  <!-- MODAL DE ADICIONAR LANÇAMENTO (COM SUPORTE A CONTAS FIXAS E CARTÃO PARCELADO) -->
   <div id="transactionModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto hide-scrollbar">
       
       <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
         <h3 id="modalTitle" class="font-bold text-lg text-white flex items-center gap-2">
-          Novo Gasto
+          Novo Gasto / Conta
         </h3>
         <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
           <i data-lucide="x" class="w-4 h-4"></i>
@@ -196,7 +206,7 @@
         <input type="hidden" id="transType" value="Despesa">
 
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Valor Total da Compra (R$)</label>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Valor (R$)</label>
           <div class="relative">
             <span class="absolute left-4 top-3 text-slate-400 font-bold">R$</span>
             <input type="number" step="0.01" id="transAmount" required placeholder="0,00" oninput="updateInstallmentPreview()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-2xl py-3 pl-12 pr-4 text-white text-lg font-bold outline-none">
@@ -205,23 +215,40 @@
 
         <div>
           <label class="block text-xs font-medium text-slate-400 mb-1">Descrição</label>
-          <input type="text" id="transDescription" required placeholder="Ex: Manutenção do Carro, Celular, Supermercado" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-2xl py-3 px-4 text-white text-sm outline-none">
+          <input type="text" id="transDescription" required placeholder="Ex: Aluguel, Conta de Luz, Internet, Manutenção" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-2xl py-3 px-4 text-white text-sm outline-none">
         </div>
 
-        <!-- Forma de Pagamento (PIX, Dinheiro, Débito ou Cartão de Crédito) -->
+        <!-- OPÇÃO 1: DESPESA FIXA RECORRENTE (Aluguel, Luz, Internet, Água, etc.) -->
+        <div id="recurringWrapper" class="bg-amber-950/20 border border-amber-800/40 rounded-2xl p-3 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400">
+              <i data-lucide="repeat" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <span class="text-xs font-semibold text-white block">Esta conta é FIXA todo mês?</span>
+              <span class="text-[10px] text-slate-400 block leading-tight">Repete todo mês automaticamente (Aluguel, Luz, etc.)</span>
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="transIsRecurring" onchange="toggleRecurringChange()" class="sr-only peer">
+            <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+          </label>
+        </div>
+
+        <!-- Forma de Pagamento -->
         <div id="paymentMethodContainer">
           <label class="block text-xs font-medium text-slate-400 mb-1">Forma de Pagamento</label>
           <select id="transPaymentMethod" onchange="toggleCardInstallments()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-2xl py-3 px-4 text-white text-sm outline-none">
-            <option value="Cartão de Crédito">💳 Cartão de Crédito (Parcelado)</option>
+            <option value="Boleto">📄 Boleto Bancário</option>
             <option value="PIX">⚡ PIX</option>
-            <option value="Cartão de Débito">💳 Cartão de Débito</option>
-            <option value="Boleto">📄 Boleto</option>
+            <option value="Débito Automático">🔄 Débito Automático</option>
+            <option value="Cartão de Crédito">💳 Cartão de Crédito (Parcelado)</option>
             <option value="Dinheiro">💵 Dinheiro</option>
           </select>
         </div>
 
-        <!-- Opção de Parcelamento (Aparece quando escolhe Cartão de Crédito) -->
-        <div id="installmentsWrapper" class="bg-indigo-950/30 border border-indigo-800/40 rounded-2xl p-3.5 space-y-2">
+        <!-- Opção de Parcelamento do Cartão (1x a 12x) -->
+        <div id="installmentsWrapper" class="hidden bg-indigo-950/30 border border-indigo-800/40 rounded-2xl p-3.5 space-y-2">
           <div class="flex items-center justify-between">
             <label class="block text-xs font-semibold text-indigo-300">Número de Parcelas</label>
             <span id="installmentCalcPreview" class="text-xs text-indigo-400 font-bold">1x de R$ 0,00</span>
@@ -242,21 +269,22 @@
             <option value="12">12x</option>
           </select>
           <p class="text-[11px] text-slate-400 leading-tight">
-            💡 O aplicativo salvará automaticamente cada parcela (1/12, 2/12...) nos meses seguintes!
+            💡 Salvará as parcelas (1/12, 2/12...) nos meses seguintes!
           </p>
         </div>
 
         <div>
           <label class="block text-xs font-medium text-slate-400 mb-1">Categoria</label>
           <select id="transCategory" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-2xl py-3 px-4 text-white text-sm outline-none">
-            <option value="Veículo & Transporte">🚗 Veículo & Manutenção</option>
-            <option value="Alimentação">🍔 Alimentação</option>
-            <option value="Moradia">🏠 Moradia</option>
-            <option value="Saúde">💊 Saúde</option>
+            <option value="Moradia">🏠 Moradia (Aluguel, Condomínio)</option>
+            <option value="Água, Luz & Gás">💡 Contas da Casa (Água, Luz, Gás)</option>
+            <option value="Internet & Telefone">🌐 Internet & Celular</option>
+            <option value="Alimentação">🍔 Alimentação & Supermercado</option>
+            <option value="Veículo & Transporte">🚗 Veículo & Transporte</option>
+            <option value="Saúde">💊 Saúde & Medicamentos</option>
             <option value="Lazer">🍿 Lazer</option>
             <option value="Educação">📚 Educação</option>
-            <option value="Compras & Eletrônicos">📱 Compras & Eletrônicos</option>
-            <option value="Assinaturas">💳 Assinaturas & Serviços</option>
+            <option value="Assinaturas">💳 Assinaturas (Netflix, Spotify)</option>
             <option value="Salário">💰 Salário / Proventos</option>
             <option value="Renda Extra">⚡ Renda Extra / Vendas</option>
             <option value="Outros">📦 Outros</option>
@@ -264,12 +292,12 @@
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Data da Compra / 1ª Parcela</label>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Data / Dia de Vencimento</label>
           <input type="date" id="transDate" required class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-2xl py-3 px-4 text-white text-sm outline-none">
         </div>
 
         <button type="submit" id="btnSubmitModal" class="w-full bg-rose-500 hover:bg-rose-400 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-rose-500/20 transition active:scale-95 mt-2">
-          Salvar Gasto
+          Salvar Lançamento
         </button>
       </form>
 
@@ -279,31 +307,38 @@
   <script>
     lucide.createIcons();
 
-    const STORAGE_KEY = 'financas_app_pro_v2';
+    const STORAGE_KEY = 'financas_app_pro_v3';
 
-    // Mês selecionado na tela (começa no mês atual)
     const now = new Date();
     let currentViewYear = now.getFullYear();
-    let currentViewMonth = now.getMonth(); // 0 = Jan, 2 = Março, etc.
+    let currentViewMonth = now.getMonth();
 
     const monthNames = [
       "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
       "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
 
-    // Dados de exemplo com compra parcelada real para demonstração imediata
+    // Dados de demonstração incluindo Despesas Fixas (Aluguel, Luz, Internet) e Salário Fixo
     const initialDemoData = [
-      { id: 1, type: 'Receita', desc: 'Salário Mensal', cat: 'Salário', amount: 4500.00, date: '2026-03-05', method: 'PIX' },
-      { id: 2, type: 'Receita', desc: 'Vendas Kiwify', cat: 'Renda Extra', amount: 650.00, date: '2026-03-06', method: 'PIX' },
-      { id: 3, type: 'Despesa', desc: 'Aluguel & Condomínio', cat: 'Moradia', amount: 1400.00, date: '2026-03-07', method: 'Boleto' },
-      { id: 4, type: 'Despesa', desc: 'Supermercado Mensal', cat: 'Alimentação', amount: 720.50, date: '2026-03-08', method: 'Cartão de Débito' },
-      // Exemplo da Manutenção do Veículo parcelada em 4x (Março, Abril, Maio, Junho)
+      // Receita Fixa (Salário cai todo mês)
+      { id: 1, type: 'Receita', desc: 'Salário Mensal', cat: 'Salário', amount: 4500.00, date: '2026-03-05', method: 'PIX', isRecurring: true, startMonth: '2026-01' },
+      { id: 2, type: 'Receita', desc: 'Vendas Kiwify (Extra)', cat: 'Renda Extra', amount: 650.00, date: '2026-03-06', method: 'PIX', isRecurring: false },
+      
+      // Despesas Fixas (Moradia, Água/Luz, Internet que repetem todo mês)
+      { id: 3, type: 'Despesa', desc: 'Aluguel & Condomínio', cat: 'Moradia', amount: 1400.00, date: '2026-03-07', method: 'Boleto', isRecurring: true, startMonth: '2026-01' },
+      { id: 4, type: 'Despesa', desc: 'Energia Elétrica e Água', cat: 'Água, Luz & Gás', amount: 280.00, date: '2026-03-10', method: 'Débito Automático', isRecurring: true, startMonth: '2026-01' },
+      { id: 5, type: 'Despesa', desc: 'Internet Fibra', cat: 'Internet & Telefone', amount: 119.90, date: '2026-03-15', method: 'PIX', isRecurring: true, startMonth: '2026-01' },
+      
+      // Despesas Variáveis normais
+      { id: 6, type: 'Despesa', desc: 'Supermercado do Mês', cat: 'Alimentação', amount: 720.50, date: '2026-03-08', method: 'Boleto', isRecurring: false },
+      
+      // Exemplo de Compra Parcelada no Cartão (Manutenção do Carro em 4x)
       { id: 101, type: 'Despesa', desc: 'Manutenção do Carro', cat: 'Veículo & Transporte', amount: 250.00, date: '2026-03-10', method: 'Cartão de Crédito', instNum: 1, instTotal: 4, instGroupId: 'demo-carro' },
       { id: 102, type: 'Despesa', desc: 'Manutenção do Carro', cat: 'Veículo & Transporte', amount: 250.00, date: '2026-04-10', method: 'Cartão de Crédito', instNum: 2, instTotal: 4, instGroupId: 'demo-carro' },
       { id: 103, type: 'Despesa', desc: 'Manutenção do Carro', cat: 'Veículo & Transporte', amount: 250.00, date: '2026-05-10', method: 'Cartão de Crédito', instNum: 3, instTotal: 4, instGroupId: 'demo-carro' },
       { id: 104, type: 'Despesa', desc: 'Manutenção do Carro', cat: 'Veículo & Transporte', amount: 250.00, date: '2026-06-10', method: 'Cartão de Crédito', instNum: 4, instTotal: 4, instGroupId: 'demo-carro' },
-      { id: 5, type: 'Despesa', desc: 'Plano de Saúde', cat: 'Saúde', amount: 380.00, date: '2026-03-12', method: 'Boleto' },
-      { id: 6, type: 'Despesa', desc: 'Netflix e Spotify', cat: 'Assinaturas', amount: 75.90, date: '2026-03-15', method: 'Cartão de Crédito' }
+      
+      { id: 7, type: 'Despesa', desc: 'Plano de Saúde', cat: 'Saúde', amount: 380.00, date: '2026-03-12', method: 'Boleto', isRecurring: true, startMonth: '2026-01' }
     ];
 
     let transactions = [];
@@ -352,7 +387,7 @@
     }
 
     function resetDataPrompt() {
-      if (confirm("Deseja restaurar os dados originais com os exemplos de parcelamento?")) {
+      if (confirm("Deseja restaurar os dados originais com contas fixas e parcelas?")) {
         transactions = [...initialDemoData];
         saveData();
         renderApp();
@@ -369,12 +404,44 @@
       downloadAnchor.remove();
     }
 
+    // Retorna todos os lançamentos ativos para o mês visualizado:
+    // 1. Lançamentos pontuais daquele mês
+    // 2. Lançamentos fixos (recorrentes) que começaram até aquele mês
+    function getMonthTransactions(year, month) {
+      const monthPrefix = `${year}-${String(month + 1).padStart(2, '0')}`;
+      const result = [];
+
+      transactions.forEach(t => {
+        if (t.isRecurring) {
+          // Se for fixo, aparece em todos os meses a partir do mês de início
+          const start = t.startMonth || (t.date ? t.date.slice(0, 7) : '2026-01');
+          if (monthPrefix >= start) {
+            // Clona o item com a data ajustada para o dia original no mês atual
+            const originalDay = t.date ? t.date.slice(8, 10) : '05';
+            result.push({
+              ...t,
+              displayDate: `${monthPrefix}-${originalDay}`
+            });
+          }
+        } else {
+          // Se for pontual ou parcela de cartão
+          if (t.date && t.date.startsWith(monthPrefix)) {
+            result.push({
+              ...t,
+              displayDate: t.date
+            });
+          }
+        }
+      });
+
+      return result;
+    }
+
     function renderApp() {
       const monthStr = monthNames[currentViewMonth];
       document.getElementById('selectedMonthDisplay').textContent = `${monthStr} de ${currentViewYear}`;
       document.getElementById('monthListTitle').textContent = monthStr;
 
-      // Badge indicador se é o mês atual do calendário
       const isActual = (currentViewYear === now.getFullYear() && currentViewMonth === now.getMonth());
       const badge = document.getElementById('badgeCurrentMonth');
       if (isActual) {
@@ -385,22 +452,24 @@
         badge.className = "text-xs bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-full font-semibold";
       }
 
-      // Filtrar lançamentos que pertencem ao mês e ano selecionados
-      const monthPrefix = `${currentViewYear}-${String(currentViewMonth + 1).padStart(2, '0')}`;
-      const filtered = transactions.filter(t => t.date && t.date.startsWith(monthPrefix));
+      const currentItems = getMonthTransactions(currentViewYear, currentViewMonth);
 
       let income = 0;
       let expense = 0;
+      let recurringExpenseTotal = 0;
       let cardInstallmentsTotal = 0;
       const catTotals = {};
 
-      filtered.forEach(t => {
+      currentItems.forEach(t => {
         const val = parseFloat(t.amount);
         if (t.type === 'Receita') {
           income += val;
         } else {
           expense += val;
           catTotals[t.cat] = (catTotals[t.cat] || 0) + val;
+          if (t.isRecurring) {
+            recurringExpenseTotal += val;
+          }
           if (t.instTotal && t.instTotal > 1) {
             cardInstallmentsTotal += val;
           }
@@ -409,45 +478,48 @@
 
       const balance = income - expense;
 
-      // Atualizar Cards
+      // Cards de KPI
       document.getElementById('totalBalance').textContent = formatBRL(balance);
       document.getElementById('totalIncome').textContent = formatBRL(income);
       document.getElementById('totalExpense').textContent = formatBRL(expense);
+      document.getElementById('totalRecurringExpense').textContent = formatBRL(recurringExpenseTotal);
       document.getElementById('totalCardInstallments').textContent = formatBRL(cardInstallmentsTotal);
 
-      // Renderizar Lista do Mês
+      // Renderizar Lista
       const listContainer = document.getElementById('transactionsList');
       listContainer.innerHTML = '';
-      document.getElementById('transCount').textContent = `${filtered.length} lançamentos`;
+      document.getElementById('transCount').textContent = `${currentItems.length} lançamentos`;
 
-      const sorted = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date));
+      const sorted = [...currentItems].sort((a, b) => new Date(b.displayDate) - new Date(a.displayDate));
 
       if (sorted.length === 0) {
         listContainer.innerHTML = `
           <div class="text-center py-8">
             <i data-lucide="calendar-x" class="w-8 h-8 mx-auto text-slate-600 mb-2"></i>
-            <p class="text-slate-400 text-xs font-medium">Nenhuma despesa ou receita registrada em ${monthStr}.</p>
-            <p class="text-slate-600 text-[11px] mt-1">Clique em "Novo Gasto" para cadastrar uma compra ou parcelamento.</p>
+            <p class="text-slate-400 text-xs font-medium">Nenhum lançamento registrado em ${monthStr}.</p>
+            <p class="text-slate-600 text-[11px] mt-1">Clique em "Novo Gasto" para cadastrar.</p>
           </div>
         `;
       } else {
         sorted.forEach(t => {
           const isIncome = t.type === 'Receita';
           const isInstallment = t.instTotal && t.instTotal > 1;
+          const isRecur = t.isRecurring;
           const row = document.createElement('div');
           row.className = "flex items-center justify-between p-3.5 bg-slate-950/60 rounded-2xl border border-slate-800/80 hover:border-slate-700 transition";
           
           row.innerHTML = `
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl ${isIncome ? 'bg-emerald-500/10 text-emerald-400' : isInstallment ? 'bg-indigo-500/10 text-indigo-400' : 'bg-rose-500/10 text-rose-400'} flex items-center justify-center font-bold text-sm">
-                ${isIncome ? '+' : isInstallment ? '<i data-lucide="credit-card" class="w-4 h-4"></i>' : '-'}
+              <div class="w-10 h-10 rounded-xl ${isIncome ? 'bg-emerald-500/10 text-emerald-400' : isRecur ? 'bg-amber-500/10 text-amber-400' : isInstallment ? 'bg-indigo-500/10 text-indigo-400' : 'bg-rose-500/10 text-rose-400'} flex items-center justify-center font-bold text-sm">
+                ${isIncome ? '+' : isRecur ? '<i data-lucide="repeat" class="w-4 h-4"></i>' : isInstallment ? '<i data-lucide="credit-card" class="w-4 h-4"></i>' : '-'}
               </div>
               <div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
                   <span class="text-sm font-semibold text-white">${t.desc}</span>
+                  ${isRecur ? `<span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">Fixa</span>` : ''}
                   ${isInstallment ? `<span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full">${t.instNum}/${t.instTotal}</span>` : ''}
                 </div>
-                <span class="text-[11px] text-slate-400">${t.cat} • ${t.date.split('-').reverse().join('/')} • ${t.method || 'Outro'}</span>
+                <span class="text-[11px] text-slate-400">${t.cat} • Vencimento: dia ${t.displayDate.slice(8, 10)} • ${t.method || 'Boleto'}</span>
               </div>
             </div>
             <div class="flex items-center gap-3">
@@ -490,7 +562,7 @@
           datasets: [{
             data: values,
             backgroundColor: [
-              '#10B981', '#3B82F6', '#6366F1', '#F59E0B', 
+              '#F59E0B', '#3B82F6', '#10B981', '#6366F1', 
               '#EC4899', '#8B5CF6', '#14B8A6', '#64748B'
             ],
             borderWidth: 2,
@@ -516,13 +588,29 @@
       });
     }
 
+    function toggleRecurringChange() {
+      const isRecur = document.getElementById('transIsRecurring').checked;
+      const installmentsWrapper = document.getElementById('installmentsWrapper');
+      const methodSelect = document.getElementById('transPaymentMethod');
+
+      if (isRecur) {
+        // Se for fixa, não pode ser cartão parcelado (pois repete para sempre)
+        installmentsWrapper.classList.add('hidden');
+        if (methodSelect.value === 'Cartão de Crédito') {
+          methodSelect.value = 'Boleto';
+        }
+      }
+    }
+
     function toggleCardInstallments() {
       const method = document.getElementById('transPaymentMethod').value;
       const type = document.getElementById('transType').value;
       const wrapper = document.getElementById('installmentsWrapper');
+      const isRecurCheck = document.getElementById('transIsRecurring');
       
       if (type === 'Despesa' && method === 'Cartão de Crédito') {
         wrapper.classList.remove('hidden');
+        isRecurCheck.checked = false; // Se parcela no cartão, desmarca despesa fixa
       } else {
         wrapper.classList.add('hidden');
       }
@@ -549,7 +637,10 @@
       const btn = document.getElementById('btnSubmitModal');
       const catSelect = document.getElementById('transCategory');
       const paymentContainer = document.getElementById('paymentMethodContainer');
-      const wrapper = document.getElementById('installmentsWrapper');
+      const installmentsWrapper = document.getElementById('installmentsWrapper');
+      const isRecurCheck = document.getElementById('transIsRecurring');
+
+      isRecurCheck.checked = false;
 
       if (type === 'Receita') {
         title.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> Nova Receita';
@@ -557,19 +648,17 @@
         btn.textContent = "Salvar Receita";
         catSelect.value = "Salário";
         paymentContainer.classList.add('hidden');
-        wrapper.classList.add('hidden');
+        installmentsWrapper.classList.add('hidden');
       } else {
-        title.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block"></span> Novo Gasto / Cartão';
+        title.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block"></span> Novo Gasto / Conta';
         btn.className = "w-full bg-rose-500 hover:bg-rose-400 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-rose-500/20 transition active:scale-95 mt-2";
         btn.textContent = "Salvar Lançamento";
-        catSelect.value = "Veículo & Transporte";
+        catSelect.value = "Moradia";
         paymentContainer.classList.remove('hidden');
-        document.getElementById('transPaymentMethod').value = 'Cartão de Crédito';
-        wrapper.classList.remove('hidden');
-        document.getElementById('transInstallments').value = '1';
+        document.getElementById('transPaymentMethod').value = 'Boleto';
+        installmentsWrapper.classList.add('hidden');
       }
 
-      // Preencher data padrão
       const today = new Date();
       const defaultDate = `${currentViewYear}-${String(currentViewMonth + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
       document.getElementById('transDate').value = defaultDate;
@@ -589,21 +678,19 @@
       const totalAmount = parseFloat(document.getElementById('transAmount').value);
       const desc = document.getElementById('transDescription').value;
       const cat = document.getElementById('transCategory').value;
-      const dateStr = document.getElementById('transDate').value; // YYYY-MM-DD
+      const dateStr = document.getElementById('transDate').value;
       const method = (type === 'Receita') ? 'PIX' : document.getElementById('transPaymentMethod').value;
-      
-      let installments = 1;
-      if (type === 'Despesa' && method === 'Cartão de Crédito') {
-        installments = parseInt(document.getElementById('transInstallments').value) || 1;
-      }
+      const isRecurring = document.getElementById('transIsRecurring').checked;
 
       if (!totalAmount || totalAmount <= 0) {
         alert("Por favor, digite um valor válido.");
         return;
       }
 
-      // Se for compra à vista (1x) ou receita
-      if (installments <= 1) {
+      const currentMonthPrefix = `${currentViewYear}-${String(currentViewMonth + 1).padStart(2, '0')}`;
+
+      // 1. Se for Conta Fixa (Recorrente)
+      if (isRecurring) {
         transactions.push({
           id: Date.now(),
           type,
@@ -611,35 +698,55 @@
           desc,
           cat,
           date: dateStr,
-          method
+          method,
+          isRecurring: true,
+          startMonth: currentMonthPrefix
         });
       } else {
-        // Se for compra parcelada no Cartão (2x a 12x):
-        // Cria cada parcela para os meses consecutivos automaticamente!
-        const installmentValue = parseFloat((totalAmount / installments).toFixed(2));
-        const groupId = 'group_' + Date.now();
-        const [year, month, day] = dateStr.split('-').map(Number);
+        // 2. Se for Cartão Parcelado
+        let installments = 1;
+        if (type === 'Despesa' && method === 'Cartão de Crédito') {
+          installments = parseInt(document.getElementById('transInstallments').value) || 1;
+        }
 
-        for (let i = 1; i <= installments; i++) {
-          // Calcular data de cada mês futuro
-          const futureDate = new Date(year, (month - 1) + (i - 1), day);
-          const fYear = futureDate.getFullYear();
-          const fMonth = String(futureDate.getMonth() + 1).padStart(2, '0');
-          const fDay = String(futureDate.getDate()).padStart(2, '0');
-          const finalDateStr = `${fYear}-${fMonth}-${fDay}`;
-
+        if (installments <= 1) {
           transactions.push({
-            id: Date.now() + i,
-            type: 'Despesa',
-            amount: installmentValue,
-            desc: desc,
-            cat: cat,
-            date: finalDateStr,
-            method: 'Cartão de Crédito',
-            instNum: i,
-            instTotal: installments,
-            instGroupId: groupId
+            id: Date.now(),
+            type,
+            amount: totalAmount,
+            desc,
+            cat,
+            date: dateStr,
+            method,
+            isRecurring: false
           });
+        } else {
+          // Parcelas do cartão
+          const installmentValue = parseFloat((totalAmount / installments).toFixed(2));
+          const groupId = 'group_' + Date.now();
+          const [year, month, day] = dateStr.split('-').map(Number);
+
+          for (let i = 1; i <= installments; i++) {
+            const futureDate = new Date(year, (month - 1) + (i - 1), day);
+            const fYear = futureDate.getFullYear();
+            const fMonth = String(futureDate.getMonth() + 1).padStart(2, '0');
+            const fDay = String(futureDate.getDate()).padStart(2, '0');
+            const finalDateStr = `${fYear}-${fMonth}-${fDay}`;
+
+            transactions.push({
+              id: Date.now() + i,
+              type: 'Despesa',
+              amount: installmentValue,
+              desc: desc,
+              cat: cat,
+              date: finalDateStr,
+              method: 'Cartão de Crédito',
+              instNum: i,
+              instTotal: installments,
+              instGroupId: groupId,
+              isRecurring: false
+            });
+          }
         }
       }
 
@@ -652,11 +759,14 @@
       const item = transactions.find(t => t.id === id);
       if (!item) return;
 
-      if (item.instGroupId) {
-        const option = confirm(
-          `Esta despesa é parcelada (${item.instNum}/${item.instTotal}).\n\nClique em OK para excluir TODAS as parcelas deste parcelamento.\nClique em Cancelar para voltar.`
-        );
-        if (option) {
+      if (item.isRecurring) {
+        if (confirm(`"${item.desc}" é uma conta fixa mensal.\n\nDeseja excluir esta conta fixa para todos os meses?`)) {
+          transactions = transactions.filter(t => t.id !== id);
+          saveData();
+          renderApp();
+        }
+      } else if (item.instGroupId) {
+        if (confirm(`Esta despesa é parcelada no cartão (${item.instNum}/${item.instTotal}).\n\nDeseja cancelar e excluir TODAS as parcelas restantes deste parcelamento?`)) {
           transactions = transactions.filter(t => t.instGroupId !== item.instGroupId);
           saveData();
           renderApp();
