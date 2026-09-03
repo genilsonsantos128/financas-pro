@@ -239,10 +239,10 @@
         <div id="paymentMethodContainer">
           <label class="block text-xs font-medium text-slate-400 mb-1">Forma de Pagamento</label>
           <select id="transPaymentMethod" onchange="toggleCardInstallments()" class="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-2xl py-3 px-4 text-white text-sm outline-none">
-            <option value="Boleto">📄 Boleto Bancário</option>
+            <option value="Cartão de Crédito" selected>💳 Cartão de Crédito (Parcelado)</option>
             <option value="PIX">⚡ PIX</option>
+            <option value="Boleto">📄 Boleto Bancário</option>
             <option value="Débito Automático">🔄 Débito Automático</option>
-            <option value="Cartão de Crédito">💳 Cartão de Crédito (Parcelado)</option>
             <option value="Dinheiro">💵 Dinheiro</option>
           </select>
         </div>
@@ -653,10 +653,11 @@
         title.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block"></span> Novo Gasto / Conta';
         btn.className = "w-full bg-rose-500 hover:bg-rose-400 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-rose-500/20 transition active:scale-95 mt-2";
         btn.textContent = "Salvar Lançamento";
-        catSelect.value = "Moradia";
+        catSelect.value = "Alimentação";
         paymentContainer.classList.remove('hidden');
-        document.getElementById('transPaymentMethod').value = 'Boleto';
-        installmentsWrapper.classList.add('hidden');
+        document.getElementById('transPaymentMethod').value = 'Cartão de Crédito';
+        installmentsWrapper.classList.remove('hidden');
+        document.getElementById('transInstallments').value = '1';
       }
 
       const today = new Date();
