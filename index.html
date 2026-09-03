@@ -158,11 +158,11 @@
     <!-- Lista de Lançamentos do Mês Selecionado -->
     <section class="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 mb-4">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="font-bold text-sm tracking-wide text-slate-200 flex items-center gap-2">
-          <i data-lucide="list" class="w-4 h-4 text-emerald-400"></i>
+        <h3 class="font-bold text-base sm:text-lg tracking-wide text-white flex items-center gap-2.5">
+          <i data-lucide="list" class="w-5 h-5 text-emerald-400"></i>
           Lançamentos de <span id="monthListTitle" class="capitalize">Março</span>
         </h3>
-        <span id="transCount" class="text-xs text-slate-400">0 itens</span>
+        <span id="transCount" class="text-xs sm:text-sm font-semibold text-slate-300 bg-slate-800/80 px-3 py-1 rounded-full">0 itens</span>
       </div>
 
       <div id="transactionsList" class="space-y-3">
@@ -506,28 +506,28 @@
           const isInstallment = t.instTotal && t.instTotal > 1;
           const isRecur = t.isRecurring;
           const row = document.createElement('div');
-          row.className = "flex items-center justify-between p-3.5 bg-slate-950/60 rounded-2xl border border-slate-800/80 hover:border-slate-700 transition";
+          row.className = "flex items-center justify-between p-4 sm:p-4.5 bg-slate-950/70 rounded-2xl border border-slate-800/90 hover:border-slate-700 transition";
           
           row.innerHTML = `
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl ${isIncome ? 'bg-emerald-500/10 text-emerald-400' : isRecur ? 'bg-amber-500/10 text-amber-400' : isInstallment ? 'bg-indigo-500/10 text-indigo-400' : 'bg-rose-500/10 text-rose-400'} flex items-center justify-center font-bold text-sm">
-                ${isIncome ? '+' : isRecur ? '<i data-lucide="repeat" class="w-4 h-4"></i>' : isInstallment ? '<i data-lucide="credit-card" class="w-4 h-4"></i>' : '-'}
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl ${isIncome ? 'bg-emerald-500/10 text-emerald-400' : isRecur ? 'bg-amber-500/10 text-amber-400' : isInstallment ? 'bg-indigo-500/10 text-indigo-400' : 'bg-rose-500/10 text-rose-400'} flex items-center justify-center font-bold text-lg flex-shrink-0">
+                ${isIncome ? '+' : isRecur ? '<i data-lucide="repeat" class="w-5 h-5"></i>' : isInstallment ? '<i data-lucide="credit-card" class="w-5 h-5"></i>' : '-'}
               </div>
               <div>
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="text-sm font-semibold text-white">${t.desc}</span>
-                  ${isRecur ? `<span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">Fixa</span>` : ''}
-                  ${isInstallment ? `<span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full">${t.instNum}/${t.instTotal}</span>` : ''}
+                  <span class="text-base sm:text-lg font-bold text-white tracking-tight">${t.desc}</span>
+                  ${isRecur ? `<span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">Fixa</span>` : ''}
+                  ${isInstallment ? `<span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold px-2.5 py-0.5 rounded-full">${t.instNum}/${t.instTotal}</span>` : ''}
                 </div>
-                <span class="text-[11px] text-slate-400">${t.cat} • Vencimento: dia ${t.displayDate.slice(8, 10)} • ${t.method || 'Boleto'}</span>
+                <span class="text-xs sm:text-sm text-slate-300 font-medium block mt-0.5">${t.cat} • Vencimento: dia ${t.displayDate.slice(8, 10)} • ${t.method || 'Boleto'}</span>
               </div>
             </div>
-            <div class="flex items-center gap-3">
-              <span class="font-bold text-sm ${isIncome ? 'text-emerald-400' : 'text-slate-200'}">
+            <div class="flex items-center gap-3.5 flex-shrink-0">
+              <span class="font-extrabold text-base sm:text-lg tracking-tight ${isIncome ? 'text-emerald-400' : 'text-slate-100'}">
                 ${isIncome ? '+' : '-'} ${formatBRL(parseFloat(t.amount))}
               </span>
-              <button onclick="deleteTransaction(${t.id})" class="text-slate-600 hover:text-rose-400 p-1 transition" title="Excluir">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              <button onclick="deleteTransaction(${t.id})" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:text-rose-400 hover:bg-slate-800 transition" title="Excluir">
+                <i data-lucide="trash-2" class="w-5 h-5"></i>
               </button>
             </div>
           `;
