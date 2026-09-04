@@ -36,7 +36,7 @@
         <div>
           <h1 class="font-bold text-base sm:text-lg tracking-tight flex items-center gap-2">
             Finanças<span class="text-emerald-400">PRO</span>
-            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-semibold">VITALÍCIO</span>
+            <span id="planBadge" class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-semibold">VITALÍCIO</span>
           </h1>
           <p class="text-xs text-slate-400">Controle de gastos, parcelas e contas fixas</p>
         </div>
@@ -48,6 +48,20 @@
       </div>
     </div>
   </header>
+
+  <!-- Barra de Aviso do Teste Grátis (7 Dias) -->
+  <div id="trialBanner" class="bg-gradient-to-r from-amber-500/15 via-emerald-500/15 to-amber-500/15 border-b border-amber-500/30 px-4 py-2 text-xs" style="display: none;">
+    <div class="max-w-md sm:max-w-xl md:max-w-3xl mx-auto flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2 text-amber-200 min-w-0">
+        <i data-lucide="clock" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
+        <span class="truncate">Teste grátis: <strong id="trialDaysLeft" class="text-white font-bold">7 dias restantes</strong></span>
+      </div>
+      <a href="https://pay.kiwify.com.br/oy4ozHN" target="_blank" class="flex-shrink-0 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-3 py-1 rounded-xl transition text-xs shadow-md shadow-emerald-500/20 flex items-center gap-1">
+        <span>Garantir Vitalício</span>
+        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+      </a>
+    </div>
+  </div>
 
   <!-- Main App Container (Mobile-first centered container) -->
   <main class="max-w-md sm:max-w-xl md:max-w-3xl mx-auto w-full px-4 pt-4 flex-1">
@@ -304,10 +318,169 @@
     </div>
   </div>
 
+  <!-- Modal Bloqueio após 7 dias de Teste Expirado -->
+  <div id="trialExpiredModal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4" style="display: none;">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden">
+      <!-- Glow de fundo -->
+      <div class="absolute -top-20 -left-20 w-44 h-44 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -right-20 w-44 h-44 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="w-16 h-16 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-4 text-amber-400 shadow-lg shadow-amber-500/10">
+        <i data-lucide="lock" class="w-8 h-8"></i>
+      </div>
+
+      <div class="inline-block bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider mb-3">
+        Período de Teste Expirado
+      </div>
+
+      <h2 class="text-2xl font-extrabold text-white mb-2 tracking-tight">
+        Seus 7 dias grátis acabaram
+      </h2>
+
+      <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
+        Seus lançamentos continuam <strong class="text-emerald-400">salvos com segurança</strong>. Para continuar gerenciando seu dinheiro e desbloquear o acesso vitalício sem mensalidades, clique no botão abaixo:
+      </p>
+
+      <!-- Botão Kiwify Oficial -->
+      <a href="https://pay.kiwify.com.br/oy4ozHN" target="_blank" class="w-full bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-extrabold py-3.5 sm:py-4 px-6 rounded-2xl transition transform active:scale-95 flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/25 text-sm sm:text-base mb-4">
+        <i data-lucide="sparkles" class="w-5 h-5"></i>
+        DESBLOQUEAR ACESSO VITALÍCIO
+      </a>
+
+      <!-- Seção de Ativação por Chave -->
+      <div class="border-t border-slate-800/80 pt-4 mt-2 text-left">
+        <button type="button" onclick="toggleKeyInput()" class="text-xs text-slate-400 hover:text-emerald-400 transition flex items-center justify-between w-full font-medium">
+          <span>Já comprou na Kiwify?</span>
+          <span class="text-emerald-400 underline font-semibold ml-1">Ativar com Chave</span>
+        </button>
+
+        <div id="keyActivationBox" class="mt-3 hidden">
+          <p class="text-[11px] text-slate-400 mb-2">
+            Insira a Chave de Acesso recebida no seu e-mail pós-compra:
+          </p>
+          <div class="flex gap-2">
+            <input type="text" id="activationKeyInput" placeholder="Ex: PRO2026" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-emerald-500 uppercase tracking-widest font-mono font-bold">
+            <button type="button" onclick="activateWithKey()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition active:scale-95">
+              Ativar
+            </button>
+          </div>
+          <p id="keyErrorMsg" class="text-rose-400 text-xs mt-2 hidden"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     lucide.createIcons();
 
     const STORAGE_KEY = 'financas_app_pro_v3';
+
+    // ===== CONFIGURAÇÃO DO TESTE GRÁTIS DE 7 DIAS E ATIVAÇÃO KIWIFY =====
+    const TRIAL_DAYS = 7;
+    const TRIAL_START_KEY = 'financas_trial_start_v1';
+    const UNLOCKED_KEY = 'financas_pro_unlocked_v1';
+    const VALID_KEYS = ['PRO2026', 'FINANCASPRO', 'FINANCAS2026', 'PRO', 'LIBERADO'];
+    const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/oy4ozHN';
+
+    function checkTrialStatus() {
+      // 1. Verifica parâmetro na URL para desbloqueio automático (ex: ?pago=true ou ?chave=PRO2026)
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlKey = (urlParams.get('chave') || urlParams.get('key') || urlParams.get('ativar') || '').toUpperCase().trim();
+      const isPaidParam = urlParams.get('pago') === 'true' || urlParams.get('status') === 'aprovado';
+
+      if (isPaidParam || (urlKey && VALID_KEYS.includes(urlKey))) {
+        localStorage.setItem(UNLOCKED_KEY, 'true');
+        alert("🎉 Parabéns! Seu acesso Vitalício ao FinançasPRO foi ativado com sucesso!");
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      // Parâmetros para testes:
+      if (urlParams.get('test_lock') === 'true') {
+        localStorage.removeItem(UNLOCKED_KEY);
+        localStorage.setItem(TRIAL_START_KEY, String(Date.now() - (8 * 24 * 60 * 60 * 1000)));
+      }
+      if (urlParams.get('reset_trial') === 'true') {
+        localStorage.removeItem(UNLOCKED_KEY);
+        localStorage.removeItem(TRIAL_START_KEY);
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      const isUnlocked = localStorage.getItem(UNLOCKED_KEY) === 'true';
+      const trialBanner = document.getElementById('trialBanner');
+      const trialExpiredModal = document.getElementById('trialExpiredModal');
+      const planBadge = document.getElementById('planBadge');
+
+      if (isUnlocked) {
+        if (trialBanner) trialBanner.style.display = 'none';
+        if (trialExpiredModal) trialExpiredModal.style.display = 'none';
+        if (planBadge) {
+          planBadge.textContent = 'PRO VITALÍCIO';
+          planBadge.className = 'text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-semibold';
+        }
+        document.body.style.overflow = 'auto';
+        return;
+      }
+
+      // Se não for vitalício, calcula dias restantes do teste
+      let trialStart = localStorage.getItem(TRIAL_START_KEY);
+      if (!trialStart) {
+        trialStart = Date.now().toString();
+        localStorage.setItem(TRIAL_START_KEY, trialStart);
+      }
+
+      const elapsedMs = Date.now() - parseInt(trialStart, 10);
+      const elapsedDays = elapsedMs / (1000 * 60 * 60 * 24);
+      const daysRemaining = Math.max(0, Math.ceil(TRIAL_DAYS - elapsedDays));
+
+      if (daysRemaining <= 0) {
+        // Bloqueia a tela
+        if (trialBanner) trialBanner.style.display = 'none';
+        if (trialExpiredModal) trialExpiredModal.style.display = 'flex';
+        if (planBadge) {
+          planBadge.textContent = 'TESTE EXPIRADO';
+          planBadge.className = 'text-[10px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded-full font-semibold';
+        }
+        document.body.style.overflow = 'hidden';
+      } else {
+        // Modo teste ativo
+        if (trialExpiredModal) trialExpiredModal.style.display = 'none';
+        if (trialBanner) trialBanner.style.display = 'block';
+        const daysLeftEl = document.getElementById('trialDaysLeft');
+        if (daysLeftEl) {
+          daysLeftEl.textContent = `${daysRemaining} ${daysRemaining === 1 ? 'dia restante' : 'dias restantes'}`;
+        }
+        if (planBadge) {
+          planBadge.textContent = `TESTE: ${daysRemaining}D`;
+          planBadge.className = 'text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-semibold';
+        }
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    function toggleKeyInput() {
+      const box = document.getElementById('keyActivationBox');
+      box.classList.toggle('hidden');
+      if (!box.classList.contains('hidden')) {
+        document.getElementById('activationKeyInput').focus();
+      }
+    }
+
+    function activateWithKey() {
+      const input = document.getElementById('activationKeyInput');
+      const errEl = document.getElementById('keyErrorMsg');
+      const typed = (input.value || '').trim().toUpperCase();
+
+      if (VALID_KEYS.includes(typed)) {
+        localStorage.setItem(UNLOCKED_KEY, 'true');
+        errEl.classList.add('hidden');
+        alert("🎉 Chave ativada com sucesso! Seu FinançasPRO agora é Vitalício.");
+        checkTrialStatus();
+        lucide.createIcons();
+      } else {
+        errEl.textContent = "Chave incorreta. Digite o código recebido após a compra.";
+        errEl.classList.remove('hidden');
+      }
+    }
 
     const now = new Date();
     let currentViewYear = now.getFullYear();
@@ -361,6 +534,8 @@
         saveData();
       }
       renderApp();
+      checkTrialStatus();
+      lucide.createIcons();
     }
 
     function saveData() {
